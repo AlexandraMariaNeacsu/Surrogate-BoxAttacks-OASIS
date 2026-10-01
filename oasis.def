@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime
+
+%post
+    # Update system and install essential packages
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update && apt-get install -y git build-essential wget curl
+
+    # Upgrade pip
+    pip install --upgrade pip
+
+    # Force a stable PyTorch version compatible with transformers and camel-ai
+    pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
+
+    # Install core framework packages
+    pip install camel-ai==0.2.90
+    pip install camel-oasis==0.2.5
+
+    # Install machine learning, data science, and huggingface dependencies
+    pip install transformers datasets accelerate scikit-learn scipy pandas huggingface_hub sentence-transformers safetensors tokenizers
+
+    # Install general utilities
+    pip install loguru pydantic pyyaml requests tqdm aiofiles
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export PYTHONUNBUFFERED=1
